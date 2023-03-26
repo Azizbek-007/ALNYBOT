@@ -47,15 +47,29 @@ class DBS:
             return 0
         else: return data[0][1]
 
-    def SetSchuldeTime(self, clock):
-        sql = f"UPDATE setting SET clock='{clock}' WHERE id=1"
+    def SetSchuldeTime(self, clock, _id):
+        sql = f"UPDATE setting SET clock='{clock}' WHERE id={_id}"
         self.post_sql_query(sql)
     
-    def SetSettingData(self, from_chat_id, message_id, reply_markup):
-        sql = f"UPDATE setting SET from_chat_id='{from_chat_id}', message_id='{message_id}', reply_markup='{reply_markup}' WHERE id=1"
+    def SetSettingData(self, from_chat_id, message_id, reply_markup, _id):
+        sql = f"UPDATE setting SET from_chat_id='{from_chat_id}', message_id='{message_id}', reply_markup='{reply_markup}' WHERE id={_id}"
         self.post_sql_query(sql)
     
-    def GetSettingData(self):
-        sql = "SELECT * FROM setting WHERE id=1"
+    def GetSettingData(self, _id):
+        sql = f"SELECT * FROM setting WHERE id={_id}"
         data = self.post_sql_query(sql)
         return data 
+    
+    def GetUserCount(self, user_id, chat_id):
+        print(user_id, chat_id)
+        query = f"SELECT * FROM reckon WHERE user_id='{user_id}' AND chat_id='{chat_id}'"
+        data = self.post_sql_query(query)
+        print(data)
+        if len(data) == 0:
+            return False
+        else: 
+            return data[0][1]
+    
+    def getSetting (self):
+        query = "select * from setting"
+        return self.post_sql_query(query)
