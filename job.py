@@ -5,40 +5,36 @@ import requests
 from data.config import BOT_TOKEN, CHAT_ID
 from utils.db_api import DBS
 import os 
+import asyncio
 
-data = DBS.getSetting(DBS)
-
+# data = DBS.getSetting(DBS)
+# print(data)
 msg_1 = 1
 msg_2 = 3
 msg_3 = 6
 msg_4 = 5
 
 def job():
-    print("sended")
-    data = DBS.getSetting(DBS)
-    url = f"https://api.telegram.org/bot{BOT_TOKEN}/copyMessage?chat_id={data[0][1]}&from_chat_id={data[0][3]}&message_id={data[0][4]}"
-    requests.get(url)
-schedule.every(msg_1).seconds.do(job)
+    print(111)
+    schedule.clear()
+    execute_cron_jobs()
+    # print("sended")
+    # data = DBS.getSetting(DBS)
+    # await asyncio.sleep(10)
+    # url = f"https://api.telegram.org/bot{BOT_TOKEN}/copyMessage?chat_id={data[0][1]}&from_chat_id={data[0][3]}&message_id={data[0][4]}"
+    # requests.get(url)
 
+def execute_cron_jobs():
+    query = "SELECT * FROM Send WHERE categoryId=1 ORDER BY RANDOM() LIMIT 1;"
+    f_data = DBS.post_sql_query(query)[0]
+    schedule.every(int(f_data[3])).seconds.do(job)
 
-def job2():
-    data = DBS.getSetting(DBS)
-    url = f"https://api.telegram.org/bot{BOT_TOKEN}/copyMessage?chat_id={data[1][1]}&from_chat_id={data[1][3]}&message_id={data[1][4]}"
-    requests.get(url)
-schedule.every(msg_2).seconds.do(job2)
+    s_query = "SELECT * FROM Send WHERE categoryId=2 ORDER BY RANDOM() LIMIT 1;"
+    s_data = DBS.post_sql_query(s_query)[0]
+    schedule.every(int(s_data[3])).seconds.do(job)
 
-def job3():
-    data = DBS.getSetting(DBS)
-    url = f"https://api.telegram.org/bot{BOT_TOKEN}/copyMessage?chat_id={data[2][1]}&from_chat_id={data[2][3]}&message_id={data[2][4]}"
-    requests.get(url)
-schedule.every(msg_3).seconds.do(job3)
+    t_query = "SELECT * FROM Send WHERE categoryId=3 ORDER BY RANDOM() LIMIT 1;"
+    t_data = DBS.post_sql_query(t_query)[0]
+    schedule.every(int(t_data[3])).seconds.do(job)
 
-def job4():
-    data = DBS.getSetting(DBS)
-    url = f"https://api.telegram.org/bot{BOT_TOKEN}/copyMessage?chat_id={data[3][1]}&from_chat_id={data[3][3]}&message_id={data[3][4]}"
-    requests.get(url)
-schedule.every(msg_4).seconds.do(job4)
-
-while True:
-    schedule.run_pending()
-    time.sleep(1)
+execute_cron_jobs()

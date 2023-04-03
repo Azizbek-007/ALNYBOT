@@ -1,116 +1,131 @@
 from aiogram import types
 from aiogram.dispatcher.filters.builtin import CommandStart
 from loader import dp
-from keyboards.inline import admin_btn
-from states import SetTime, SetTime4, SetTime3, SetTime2
+from keyboards.default import admin_btn, back_btn, interview_btn
+from states import SateSetQuantity, SateSetLink, SateSetInterview, SateSetRandomPost, SateSetOprogram
 from utils.db_api import DBS
 import schedule
 from aiogram.dispatcher import FSMContext
 
-# def validate_clock(clock_str):
-#     try:
-#         hour, minute = clock_str.strip().split(':')
-#         if int(hour) not in range(0, 24):
-#             return False
-
-#         if int(minute) not in range(0, 60):
-#             return False
-
-#         return True
-
-#     except ValueError:
-#         return False
-
     
 
-@dp.message_handler(commands='admin')
-async def bot_admin(message: types.Message):
-    await message.answer("Hi admin", reply_markup=admin_btn())
-
-@dp.callback_query_handler(text="SendMessage")
-async def bot_SendMessage(call: types.CallbackQuery):
-    await call.message.delete()
-    await SetTime.promis.set()
-    await call.message.answer("magan jiberiliw waqtin kiritn'")
-
-
-@dp.message_handler(content_types=types.ContentTypes.TEXT, state=SetTime.promis)
-async def bot_SetTime(message: types.Message):
-    DBS.SetSchuldeTime(DBS, message.text, 1)
-    await SetTime.next()
-    await message.answer("Xabar jiberin'")
-
-@dp.message_handler(content_types=types.ContentTypes.ANY, state=SetTime.senMSG)
-async def SetSendMessageToAll(message: types.Message, state: FSMContext):
+@dp.message_handler(text=["/admin", "⬅️Назад"], state="*")
+async def bot_admin(message: types.Message, state: FSMContext):
     await state.finish()
-    DBS.SetSettingData(DBS, message.from_user.id, message.message_id, message.reply_markup, 1)
-    await message.answer("Successfuly 200")
+    await message.answer("👇 Выбирайте меню", reply_markup=admin_btn())
 
 
+@dp.message_handler(text="Количество")
+async def Quantity(msg: types.Message):
+    await SateSetQuantity.promis.set()
+    await msg.answer("Отправьте количество", reply_markup=back_btn)
+
+@dp.message_handler(state=SateSetQuantity.promis)
+async def BotQuantity(msg: types.Message, state: FSMContext):
+    try:
+        quan = int(msg.text)
+        DBS.SetQuantity(DBS, quan)
+        await state.finish()
+        await msg.reply("✅")
+        await msg.answer("👇 Выбирайте меню", reply_markup=admin_btn())
+    except Exception as e:
+        print(e)
+        await msg.reply("Информация введена неверно. Пожалуйста, введите еще раз!")
+
+@dp.message_handler(text="Реферальная ссылка")
+async def ReferralLink(msg: types.Message):
+    await SateSetLink.promis.set()
+    await msg.answer("Отправьте линк", reply_markup=back_btn)
 
 
-@dp.callback_query_handler(text="SendMessage2")
-async def bot_SendMessage2(call: types.CallbackQuery):
-    await call.message.delete()
-    await SetTime2.promis.set()
-    await call.message.answer("magan jiberiliw waqtin kiritn'")
-
-
-@dp.callback_query_handler(text="SendMessage3")
-async def bot_SendMessage3(call: types.CallbackQuery):
-    await call.message.delete()
-    await SetTime3.promis.set()
-    await call.message.answer("magan jiberiliw waqtin kiritn'")
-
-
-@dp.callback_query_handler(text="SendMessage4")
-async def bot_SendMessage4(call: types.CallbackQuery):
-    await call.message.delete()
-    await SetTime4.promis.set()
-    await call.message.answer("magan jiberiliw waqtin kiritn'")
-
-
-
-
-@dp.message_handler(content_types=types.ContentTypes.TEXT, state=SetTime2.promis)
-async def bot_SetTime2(message: types.Message):
-    # if validate_clock(message.text):
-    DBS.SetSchuldeTime(DBS, message.text, 2)
-    await SetTime2.next()
-    await message.answer("Xabar jiberin'")
-
-@dp.message_handler(content_types=types.ContentTypes.ANY, state=SetTime2.senMSG)
-async def SetSendMessageToAll2(message: types.Message, state: FSMContext):
+@dp.message_handler(state=SateSetLink.promis)
+async def BotReferralLink(msg: types.Message, state: FSMContext):
+    DBS.SetRefLink(DBS, msg.text)
     await state.finish()
-    DBS.SetSettingData(DBS, message.from_user.id, message.message_id, message.reply_markup, 2)
-    await message.answer("Successfuly 200")
+    await msg.reply("✅")
+    await msg.answer("👇 Выбирайте меню", reply_markup=admin_btn())
+ 
 
+@dp.message_handler(text="Видео интервью с оснаветельом")
+async def VideoInterview(msg: types.Message):
+    await SateSetInterview.road.set()
+    await msg.answer("👇 Выбирайте меню", reply_markup=interview_btn)
 
+@dp.message_handler(text="Создать", state=SateSetInterview.road)
+async def Create(msg: types.Message):
+    await SateSetInterview.next()
+    await msg.answer("Отправить мне сообщение")
 
+@dp.message_handler(state=SateSetInterview.promis)
+async def BotCreateInterview(msg: types.Message, state: FSMContext):
+    _id = DBS.CreateInterview(DBS, msg.message_id, msg.from_id, 1)
+    await state.update_data(interviewID=_id)
+    await msg.reply("✅")
+    await msg.answer("Введите интервал в секундах")
+    await SateSetInterview.next()
 
-@dp.message_handler(content_types=types.ContentTypes.TEXT, state=SetTime3.promis)
-async def bot_SetTime3(message: types.Message):
-    # if validate_clock(message.text):
-    DBS.SetSchuldeTime(DBS, message.text, 3)
-    await SetTime3.next()
-    await message.answer("Xabar jiberin'")
-
-@dp.message_handler(content_types=types.ContentTypes.ANY, state=SetTime3.senMSG)
-async def SetSendMessageToAll3(message: types.Message, state: FSMContext):
+@dp.message_handler(state=SateSetInterview.interval)
+async def BotCreateInterviewInterval(msg: types.Message, state: FSMContext):
+    data = await state.get_data()
+    DBS.SetInterval(DBS, int(msg.text), data['interviewID'])
+    await msg.reply("✅")
+    await msg.answer("👇 Выбирайте меню", reply_markup=admin_btn())
     await state.finish()
-    DBS.SetSettingData(DBS, message.from_user.id, message.message_id, message.reply_markup, 3)
-    await message.answer("Successfuly 200")
+    
+#
+
+@dp.message_handler(text="Рандомный пост")
+async def RandomPost(msg: types.Message):
+    await SateSetRandomPost.road.set()
+    await msg.answer("👇 Выбирайте меню", reply_markup=interview_btn)
+
+@dp.message_handler(text="Создать", state=SateSetRandomPost.road)
+async def RCreate(msg: types.Message):
+    await SateSetRandomPost.next()
+    await msg.answer("Отправить мне сообщение")
+
+@dp.message_handler(state=SateSetRandomPost.promis)
+async def BotCreateRpost(msg: types.Message, state: FSMContext):
+    _id = DBS.CreateInterview(DBS, msg.message_id, msg.from_id, 2)
+    await state.update_data(interviewID=_id)
+    await msg.reply("✅")
+    await msg.answer("Введите интервал в секундах")
+    await SateSetRandomPost.next()
 
 
-@dp.message_handler(content_types=types.ContentTypes.TEXT, state=SetTime4.promis)
-async def bot_SetTime4(message: types.Message):
-    # if validate_clock(message.text):
-    DBS.SetSchuldeTime(DBS, message.text, 4)
-    await SetTime4.next()
-    await message.answer("Xabar jiberin'")
-
-@dp.message_handler(content_types=types.ContentTypes.ANY, state=SetTime4.senMSG)
-async def SetSendMessageToAll4(message: types.Message, state: FSMContext):
+@dp.message_handler(state=SateSetRandomPost.interval)
+async def BotCreateRabdomPostInterval(msg: types.Message, state: FSMContext):
+    data = await state.get_data()
+    DBS.SetInterval(DBS, int(msg.text), data['interviewID'])
+    await msg.reply("✅")
+    await msg.answer("👇 Выбирайте меню", reply_markup=admin_btn())
     await state.finish()
-    DBS.SetSettingData(DBS, message.from_user.id, message.message_id, message.reply_markup, 4)
-    await message.answer("Successfuly 200")
+
+#
+
+
+@dp.message_handler(text="Пост о программе")
+async def BotOprogr(msg: types.Message):
+    await SateSetOprogram.road.set()
+    await msg.answer("👇 Выбирайте меню", reply_markup=interview_btn)
+
+@dp.message_handler(text="Создать", state=SateSetOprogram.road)
+async def OPCreate(msg: types.Message):
+    await SateSetOprogram.next()
+    await msg.answer("Отправить мне сообщение")
+
+@dp.message_handler(state=SateSetOprogram.promis)
+async def BotCreateOProgram(msg: types.Message, state: FSMContext):
+    _id = DBS.CreateInterview(DBS, msg.message_id, msg.from_id, 3)
+    await state.update_data(interviewID=_id)
+    await msg.reply("✅")
+    await msg.answer("Введите интервал в секундах")
+    await SateSetOprogram.next()
+
+@dp.message_handler(state=SateSetOprogram.interval)
+async def BotCreateOPInterval(msg: types.Message, state: FSMContext):
+    data = await state.get_data()
+    DBS.SetInterval(DBS, int(msg.text), data['interviewID'])
+    await msg.reply("✅")
+    await msg.answer("👇 Выбирайте меню", reply_markup=admin_btn())
+    await state.finish()

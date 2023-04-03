@@ -1,1 +1,1 @@
-from .form import SetTime, SetTime1, SetTime2, SetTime3, SetTime4
+from .form import SateSetQuantity, SateSetLink, SateSetInterview, SateSetRandomPost, SateSetOprogram

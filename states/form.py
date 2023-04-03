@@ -1,21 +1,20 @@
 from aiogram.dispatcher.filters.state import State, StatesGroup
 
-class SetTime(StatesGroup):
+class SateSetQuantity(StatesGroup):
     promis = State()
-    senMSG = State()
 
-class SetTime1(StatesGroup):
+class SateSetLink(StatesGroup):
     promis = State()
-    senMSG = State()
 
-class SetTime2(StatesGroup):
+class SateSetInterview(StatesGroup):
+    road = State()
     promis = State()
-    senMSG = State()
-
-class SetTime3(StatesGroup):
+    interval = State()
+class SateSetRandomPost(StatesGroup):
+    road = State()
     promis = State()
-    senMSG = State()
-
-class SetTime4(StatesGroup):
+    interval = State()
+class SateSetOprogram(StatesGroup):
+    road = State()
     promis = State()
-    senMSG = State()
+    interval = State()

@@ -11,7 +11,7 @@ def admin_btn():
         InlineKeyboardButton(text="Send Message 4", callback_data="SendMessage4")
     )
 
-def added_btn(): 
+def added_btn(user_id): 
     return InlineKeyboardMarkup().add(
-        InlineKeyboardButton(text="Odam qoshdim", callback_data="added")
+        InlineKeyboardButton(text="Я добавил", callback_data=f"added={user_id}")
     )
