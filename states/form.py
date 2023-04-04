@@ -4,7 +4,9 @@ class SateSetQuantity(StatesGroup):
     promis = State()
 
 class SateSetLink(StatesGroup):
+    road = State()
     promis = State()
+    interval = State()
 
 class SateSetInterview(StatesGroup):
     road = State()
