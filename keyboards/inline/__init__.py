@@ -1,1 +1,1 @@
-from .keyboard import admin_btn, added_btn
+from .keyboard import admin_btn, added_btn, delete_btn

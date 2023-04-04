@@ -2,6 +2,7 @@ from aiogram import types
 from aiogram.dispatcher.filters.builtin import CommandStart
 from loader import dp
 from keyboards.default import admin_btn, back_btn, interview_btn
+from keyboards.inline import delete_btn
 from states import SateSetQuantity, SateSetLink, SateSetInterview, SateSetRandomPost, SateSetOprogram
 from utils.db_api import DBS
 import schedule
@@ -56,6 +57,15 @@ async def Create(msg: types.Message):
     await SateSetInterview.next()
     await msg.answer("Отправить мне сообщение")
 
+@dp.message_handler(text="Видеть все", state=SateSetInterview.road)
+async def VGetAll(msg: types.Message, state: FSMContext):
+    await state.finish()
+    data = DBS.GetAll(DBS, 1)
+    for x in data:
+        await dp.bot.copy_message(msg.from_id, x[2], x[1], reply_markup=delete_btn(x[0]))
+
+
+
 @dp.message_handler(state=SateSetInterview.promis)
 async def BotCreateInterview(msg: types.Message, state: FSMContext):
     _id = DBS.CreateInterview(DBS, msg.message_id, msg.from_id, 1)
@@ -83,6 +93,13 @@ async def RandomPost(msg: types.Message):
 async def RCreate(msg: types.Message):
     await SateSetRandomPost.next()
     await msg.answer("Отправить мне сообщение")
+
+@dp.message_handler(text="Видеть все", state=SateSetRandomPost.road)
+async def RPGetAll(msg: types.Message, state: FSMContext):
+    await state.finish()
+    data = DBS.GetAll(DBS, 2)
+    for x in data:
+        await dp.bot.copy_message(msg.from_id, x[2], x[1], reply_markup=delete_btn(x[0]))
 
 @dp.message_handler(state=SateSetRandomPost.promis)
 async def BotCreateRpost(msg: types.Message, state: FSMContext):
@@ -113,6 +130,14 @@ async def BotOprogr(msg: types.Message):
 async def OPCreate(msg: types.Message):
     await SateSetOprogram.next()
     await msg.answer("Отправить мне сообщение")
+
+
+@dp.message_handler(text="Видеть все", state=SateSetOprogram.road)
+async def POGetAll(msg: types.Message, state: FSMContext):
+    await state.finish()
+    data = DBS.GetAll(DBS, 3)
+    for x in data:
+        await dp.bot.copy_message(msg.from_id, x[2], x[1], reply_markup=delete_btn(x[0]))
 
 @dp.message_handler(state=SateSetOprogram.promis)
 async def BotCreateOProgram(msg: types.Message, state: FSMContext):

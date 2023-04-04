@@ -27,7 +27,8 @@ def job():
 def execute_cron_jobs():
     query = "SELECT * FROM Send WHERE categoryId=1 ORDER BY RANDOM() LIMIT 1;"
     f_data = DBS.post_sql_query(query)[0]
-    schedule.every(int(f_data[3])).seconds.do(job)
+    print(f_data[3])
+    schedule.every(11).seconds.do(job)
 
     s_query = "SELECT * FROM Send WHERE categoryId=2 ORDER BY RANDOM() LIMIT 1;"
     s_data = DBS.post_sql_query(s_query)[0]

@@ -15,3 +15,8 @@ def added_btn(user_id):
     return InlineKeyboardMarkup().add(
         InlineKeyboardButton(text="Я добавил", callback_data=f"added={user_id}")
     )
+
+def delete_btn(cat_id):
+    return InlineKeyboardMarkup().add(
+        InlineKeyboardButton("удалить", callback_data=f"del={cat_id}")
+    )

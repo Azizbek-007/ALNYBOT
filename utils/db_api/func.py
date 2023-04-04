@@ -74,6 +74,12 @@ class DBS:
         schedule.clear()
         self.execute_cron_jobs(DBS)
     
+    def GetAll (self, _id):
+        sql = f"SELECT * FROM Send WHERE categoryId={_id}"
+        print(sql)
+        data = self.post_sql_query(sql)
+        return data
+    
     def SetSettingData(self, from_chat_id, message_id, reply_markup, _id):
         sql = f"UPDATE setting SET from_chat_id='{from_chat_id}', message_id='{message_id}', reply_markup='{reply_markup}' WHERE id={_id}"
         self.post_sql_query(sql)
