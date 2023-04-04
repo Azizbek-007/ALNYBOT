@@ -19,14 +19,14 @@ def job():
     # requests.get(url)
 
 def job_2():
-    print(111)
+    print(222)
     schedule.clear()
     execute_cron_jobs()
     # url = f"https://api.telegram.org/bot{BOT_TOKEN}/copyMessage?chat_id={data[0][1]}&from_chat_id={data[0][3]}&message_id={data[0][4]}"
     # requests.get(url)
 
 def job_3():
-    print(111)
+    print(333)
     schedule.clear()
     execute_cron_jobs()
     # url = f"https://api.telegram.org/bot{BOT_TOKEN}/copyMessage?chat_id={data[0][1]}&from_chat_id={data[0][3]}&message_id={data[0][4]}"
@@ -45,5 +45,9 @@ def execute_cron_jobs():
     t_query = "SELECT * FROM Send WHERE categoryId=3 ORDER BY RANDOM() LIMIT 1;"
     t_data = DBS.post_sql_query(t_query)[0]
     schedule.every(int(t_data[3])).seconds.do(job_3)
+    while True:
+        schedule.run_pending()
+        time.sleep(1)
 
 execute_cron_jobs()
+
