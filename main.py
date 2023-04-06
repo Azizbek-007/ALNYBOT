@@ -4,6 +4,8 @@ import requests
 from data.config import BOT_TOKEN, CHAT_ID
 from utils.db_api import DBS
 
+print(BOT_TOKEN)
+
 class Job_first:
     _id = 0
     def job(self):
@@ -19,10 +21,12 @@ class Job_first:
 
     def execute_cron_jobs(self):
         query = "SELECT * FROM Send WHERE categoryId=1 ORDER BY RANDOM() LIMIT 1;"
-        f_data = DBS.post_sql_query(query)[0]
-        self._id += int(f_data[0])
-        print(f_data[3])
-        schedule.every(f_data[3]).seconds.do(self.job)
+        data = DBS.post_sql_query(query)
+        if data: 
+            f_data = data[0] 
+            self._id += int(f_data[0])
+            print(f_data[3])
+            schedule.every(f_data[3]).seconds.do(self.job)
         while True:
             schedule.run_pending()
             time.sleep(1)
