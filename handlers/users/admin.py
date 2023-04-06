@@ -47,11 +47,15 @@ async def RLCreate(msg: types.Message):
     await msg.answer("Отправить мне сообщение")
 
 @dp.message_handler(text="Видеть все", state=SateSetLink.road)
-async def RLGetAll(msg: types.Message, state: FSMContext):
+async def RLGetAlllm(msg: types.Message, state: FSMContext):
     await state.finish()
     data = DBS.GetAll(DBS, 4)
-    for x in data:
-        await dp.bot.copy_message(msg.from_id, x[2], x[1], reply_markup=delete_btn(x[0]))
+    if data:
+        for x in data:
+            await msg.reply("✅", reply_markup=back_btn)
+            await dp.bot.copy_message(msg.from_id, x[2], x[1], reply_markup=delete_btn(x[0]))
+    else:
+        await msg.reply("Not Found", reply_markup=admin_btn())
 
 @dp.message_handler(content_types=types.ContentTypes.ANY,state=SateSetLink.promis)
 async def BotCreateInterview(msg: types.Message, state: FSMContext):
