@@ -9,10 +9,11 @@ class Job_Sec:
     def job(self):
         query = f"SELECT * FROM Send WHERE id={self._id}"
         data = DBS.post_sql_query(query)
-        print(data)
-        url = f"https://api.telegram.org/bot{BOT_TOKEN}/copyMessage?chat_id={CHAT_ID}&from_chat_id={data[0][2]}&message_id={data[0][1]}"
-        requests.get(url)
-        self._id *= 0
+        if data:
+            print(data)
+            url = f"https://api.telegram.org/bot{BOT_TOKEN}/copyMessage?chat_id={CHAT_ID}&from_chat_id={data[0][2]}&message_id={data[0][1]}"
+            requests.get(url)
+            self._id *= 0
         schedule.clear()
         self.execute_cron_jobs()
 
