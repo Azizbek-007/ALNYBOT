@@ -116,7 +116,7 @@ async def BotCreateInterviewInterval(msg: types.Message, state: FSMContext):
     except: 
         await msg.reply("Sifira qilip jiberin'")
     
-#
+# 
 
 @dp.message_handler(text="Рандомный пост")
 async def RandomPost(msg: types.Message):
