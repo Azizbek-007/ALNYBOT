@@ -17,15 +17,15 @@ async def any(msg: types.Message):
         if count_data < data:
             await msg.delete()
             get = await msg.answer(f"<a href='tg://user?id={msg.from_id}'>{msg.from_user.full_name}</a> Для размещения объявления необходимо добавить в группу не менее {add_count} человек.", 'HTML', reply_markup=added_btn(msg.from_id))
-            await dp.bot.restrict_chat_member(
-                            chat_id=msg.chat.id,
-                            user_id=msg.from_id,
-                            until_date=math.floor(time.time()) + 1*60,
-                            permissions=types.ChatPermissions(
-                                        can_send_messages=False, 
-                                        can_invite_users=True
-                                    )
-                            )
+            # await dp.bot.restrict_chat_member(
+            #                 chat_id=msg.chat.id,
+            #                 user_id=msg.from_id,
+            #                 until_date=math.floor(time.time()) + 1*60,
+            #                 permissions=types.ChatPermissions(
+            #                             can_send_messages=False, 
+            #                             can_invite_users=True
+            #                         )
+            #                 )
             await asyncio.sleep(60)
             await dp.bot.delete_message(msg.chat.id, get.message_id)
         
