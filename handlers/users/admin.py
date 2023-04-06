@@ -50,6 +50,7 @@ async def RLCreate(msg: types.Message):
 async def RLGetAlllm(msg: types.Message, state: FSMContext):
     await state.finish()
     data = DBS.GetAll(DBS, 4)
+    print(data)
     if data:
         await msg.reply("✅", reply_markup=back_btn)
         for x in data:
