@@ -55,7 +55,7 @@ async def RLGetAlllm(msg: types.Message, state: FSMContext):
         await msg.reply("✅", reply_markup=back_btn)
         for x in data:
             print(x)
-            # await dp.bot.copy_message(msg.from_id, x[2], x[1], reply_markup=delete_btn(x[0]))
+            await dp.bot.copy_message(msg.from_id, x[2], x[1], reply_markup=delete_btn(x[0]))
     else:
         await msg.reply("Not Found", reply_markup=admin_btn())
 
