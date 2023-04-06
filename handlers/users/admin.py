@@ -43,7 +43,7 @@ async def ReferralLink(msg: types.Message):
 
 @dp.message_handler(text="Создать", state=SateSetLink.road)
 async def RLCreate(msg: types.Message):
-    await SateSetLink.next()
+    await SateSetLink.promis.set()
     await msg.answer("Отправить мне сообщение")
 
 @dp.message_handler(text="Видеть все", state=SateSetLink.road)
@@ -51,13 +51,13 @@ async def RLGetAlllm(msg: types.Message, state: FSMContext):
     await state.finish()
     data = DBS.GetAll(DBS, 4)
     if data:
+        await msg.reply("✅", reply_markup=back_btn)
         for x in data:
-            await msg.reply("✅", reply_markup=back_btn)
             await dp.bot.copy_message(msg.from_id, x[2], x[1], reply_markup=delete_btn(x[0]))
     else:
         await msg.reply("Not Found", reply_markup=admin_btn())
 
-@dp.message_handler(content_types=types.ContentTypes.ANY,state=SateSetLink.promis)
+@dp.message_handler(content_types=types.ContentTypes.ANY, state=SateSetLink.promis)
 async def BotCreateInterview(msg: types.Message, state: FSMContext):
     _id = DBS.CreateInterview(DBS, msg.message_id, msg.from_id, 4)
     await state.update_data(interviewID=_id)
@@ -95,8 +95,8 @@ async def VGetAll(msg: types.Message, state: FSMContext):
     await state.finish()
     data = DBS.GetAll(DBS, 1)
     if data:
+        await msg.reply("✅", reply_markup=back_btn)
         for x in data:
-            await msg.reply("✅", reply_markup=back_btn)
             await dp.bot.copy_message(msg.from_id, x[2], x[1], reply_markup=delete_btn(x[0]))
     else:
         await msg.reply("Not Found", reply_markup=admin_btn())
@@ -138,8 +138,8 @@ async def RPGetAll(msg: types.Message, state: FSMContext):
     await state.finish()
     data = DBS.GetAll(DBS, 2)
     if data:
+        await msg.reply("✅", reply_markup=back_btn)
         for x in data:
-            await msg.reply("✅", reply_markup=back_btn)
             await dp.bot.copy_message(msg.from_id, x[2], x[1], reply_markup=delete_btn(x[0]))
     else:
         await msg.reply("Not Found", reply_markup=admin_btn())
@@ -184,8 +184,8 @@ async def POGetAll(msg: types.Message, state: FSMContext):
     await state.finish()
     data = DBS.GetAll(DBS, 3)
     if data:
+        await msg.reply("✅", reply_markup=back_btn)
         for x in data:
-            await msg.reply("✅", reply_markup=back_btn)
             await dp.bot.copy_message(msg.from_id, x[2], x[1], reply_markup=delete_btn(x[0]))
     else:
         await msg.reply("Not Found", reply_markup=admin_btn())
