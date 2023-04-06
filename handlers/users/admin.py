@@ -21,7 +21,7 @@ async def Quantity(msg: types.Message):
     await SateSetQuantity.promis.set()
     await msg.answer("Отправьте количество", reply_markup=back_btn)
 
-@dp.message_handler(state=SateSetQuantity.promis)
+@dp.message_handler(content_types=types.ContentTypes.ANY, state=SateSetQuantity.promis)
 async def BotQuantity(msg: types.Message, state: FSMContext):
     try:
         quan = int(msg.text)
@@ -53,7 +53,7 @@ async def RLGetAll(msg: types.Message, state: FSMContext):
     for x in data:
         await dp.bot.copy_message(msg.from_id, x[2], x[1], reply_markup=delete_btn(x[0]))
 
-@dp.message_handler(state=SateSetLink.promis)
+@dp.message_handler(content_types=types.ContentTypes.ANY,state=SateSetLink.promis)
 async def BotCreateInterview(msg: types.Message, state: FSMContext):
     _id = DBS.CreateInterview(DBS, msg.message_id, msg.from_id, 4)
     await state.update_data(interviewID=_id)
