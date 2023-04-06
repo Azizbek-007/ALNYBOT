@@ -9,7 +9,7 @@ import asyncio
 @dp.message_handler(content_types=types.ContentType.ANY, chat_type=[types.ChatType.GROUP, types.ChatType.SUPERGROUP])
 async def any(msg: types.Message):
     user_data = await dp.bot.get_chat_member(msg.chat.id, msg.from_id)
-    if user_data.status == 'member':
+    if user_data.status == 'admin' or user_data.status == "restricted":
         count_data = DBS.reckon_count(DBS, msg.from_id, msg.chat.id)
         data = DBS.GetQuantity(DBS)
         add_count = data - count_data
