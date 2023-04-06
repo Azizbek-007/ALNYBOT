@@ -20,16 +20,19 @@ class Job_first:
 
 
     def execute_cron_jobs(self):
-        query = "SELECT * FROM Send WHERE categoryId=1 ORDER BY RANDOM() LIMIT 1;"
-        data = DBS.post_sql_query(query)
-        
-        f_data = data[0] 
-        self._id += int(f_data[0])
-        print(f_data[3])
-        schedule.every(f_data[3]).seconds.do(self.job)
-        while True:
-            schedule.run_pending()
+        try:
+            query = "SELECT * FROM Send WHERE categoryId=1 ORDER BY RANDOM() LIMIT 1;"
+            data = DBS.post_sql_query(query)
+            f_data = data[0] 
+            self._id += int(f_data[0])
+            print(f_data[3])
+            schedule.every(f_data[3]).seconds.do(self.job)
+            while True:
+                schedule.run_pending()
+                time.sleep(1)
+        except: 
             time.sleep(1)
+            self.execute_cron_jobs()
 
 
 Job_first().execute_cron_jobs()
