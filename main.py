@@ -27,12 +27,13 @@ class Job_first:
             self._id += int(f_data[0])
             print(f_data[3])
             schedule.every(f_data[3]).seconds.do(self.job)
-            while True:
-                schedule.run_pending()
-                time.sleep(1)
         except: 
             time.sleep(1)
             self.execute_cron_jobs()
+        
+        while True:
+            schedule.run_pending()
+            time.sleep(1)
 
 
 Job_first().execute_cron_jobs()
