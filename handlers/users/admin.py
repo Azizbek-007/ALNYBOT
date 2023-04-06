@@ -90,9 +90,11 @@ async def Create(msg: types.Message):
 async def VGetAll(msg: types.Message, state: FSMContext):
     await state.finish()
     data = DBS.GetAll(DBS, 1)
-    for x in data:
-        await dp.bot.copy_message(msg.from_id, x[2], x[1], reply_markup=delete_btn(x[0]))
-
+    if data:
+        for x in data:
+            await dp.bot.copy_message(msg.from_id, x[2], x[1], reply_markup=delete_btn(x[0]))
+    else:
+        await msg.reply("Not Found", reply_markup=admin_btn())
 
 
 @dp.message_handler(content_types=types.ContentType.ANY, state=SateSetInterview.promis)
