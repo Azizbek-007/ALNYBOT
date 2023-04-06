@@ -92,6 +92,7 @@ async def VGetAll(msg: types.Message, state: FSMContext):
     data = DBS.GetAll(DBS, 1)
     if data:
         for x in data:
+            await msg.reply("✅", reply_markup=back_btn)
             await dp.bot.copy_message(msg.from_id, x[2], x[1], reply_markup=delete_btn(x[0]))
     else:
         await msg.reply("Not Found", reply_markup=admin_btn())
@@ -132,8 +133,13 @@ async def RCreate(msg: types.Message):
 async def RPGetAll(msg: types.Message, state: FSMContext):
     await state.finish()
     data = DBS.GetAll(DBS, 2)
-    for x in data:
-        await dp.bot.copy_message(msg.from_id, x[2], x[1], reply_markup=delete_btn(x[0]))
+    if data:
+        for x in data:
+            await msg.reply("✅", reply_markup=back_btn)
+            await dp.bot.copy_message(msg.from_id, x[2], x[1], reply_markup=delete_btn(x[0]))
+    else:
+        await msg.reply("Not Found", reply_markup=admin_btn())
+
 
 @dp.message_handler(content_types=types.ContentType.ANY, state=SateSetRandomPost.promis)
 async def BotCreateRpost(msg: types.Message, state: FSMContext):
@@ -173,8 +179,12 @@ async def OPCreate(msg: types.Message):
 async def POGetAll(msg: types.Message, state: FSMContext):
     await state.finish()
     data = DBS.GetAll(DBS, 3)
-    for x in data:
-        await dp.bot.copy_message(msg.from_id, x[2], x[1], reply_markup=delete_btn(x[0]))
+    if data:
+        for x in data:
+            await msg.reply("✅", reply_markup=back_btn)
+            await dp.bot.copy_message(msg.from_id, x[2], x[1], reply_markup=delete_btn(x[0]))
+    else:
+        await msg.reply("Not Found", reply_markup=admin_btn())
 
 @dp.message_handler(content_types=types.ContentType.ANY, state=SateSetOprogram.promis)
 async def BotCreateOProgram(msg: types.Message, state: FSMContext):
