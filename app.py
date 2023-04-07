@@ -11,15 +11,7 @@ import time
 
 
 async def on_startup(dispatcher):
-    # Birlamchi komandalar (/star va /help)
-    await set_default_commands(dispatcher)
-
-    # Bot ishga tushgani haqida adminga xabar berish
     await on_startup_notify(dispatcher)
-
-
-CHAT_ID = 123456789  # Replace with your chat ID
-GROUP_ID = -1001823734059  # Replace with your group ID
 
 
 
