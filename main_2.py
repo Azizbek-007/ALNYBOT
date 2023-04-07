@@ -10,7 +10,7 @@ print(BOT_TOKEN)
 class Job_first:
     _id = 0
     def job(self):
-        query = f"SELECT * FROM Send WHERE categoryId=1 AND id={self._id}"
+        query = f"SELECT * FROM Send WHERE id={self._id}"
         data = DBS.post_sql_query(query)
         if data:
             url = f"https://api.telegram.org/bot{BOT_TOKEN}/copyMessage?chat_id={CHAT_ID}&from_chat_id={data[0][2]}&message_id={data[0][1]}"
