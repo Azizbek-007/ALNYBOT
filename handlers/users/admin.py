@@ -7,16 +7,17 @@ from states import SateSetQuantity, SateSetLink, SateSetInterview, SateSetRandom
 from utils.db_api import DBS
 import schedule
 from aiogram.dispatcher import FSMContext
+from data.config import ADMINS
 
     
 
-@dp.message_handler(text=["/admin", "⬅️Назад"], state="*")
+@dp.message_handler(text=["/admin", "⬅️Назад"], state="*", user_id=[ADMINS])
 async def bot_admin(message: types.Message, state: FSMContext):
     await state.finish()
     await message.answer("👇 Выбирайте меню", reply_markup=admin_btn())
 
 
-@dp.message_handler(text="Количество")
+@dp.message_handler(text="Количество", user_id=[ADMINS])
 async def Quantity(msg: types.Message):
     await SateSetQuantity.promis.set()
     await msg.answer("Отправьте количество", reply_markup=back_btn)
@@ -36,7 +37,7 @@ async def BotQuantity(msg: types.Message, state: FSMContext):
 # 
 
 
-@dp.message_handler(text="Реферальная ссылка")
+@dp.message_handler(text="Реферальная ссылка", user_id=[ADMINS])
 async def ReferralLink(msg: types.Message):
     await SateSetLink.road.set()
     await msg.answer("Отправьте линк", reply_markup=interview_btn)
@@ -82,7 +83,7 @@ async def BotRLInterval(msg: types.Message, state: FSMContext):
 # 
 
 
-@dp.message_handler(text="Видео интервью с оснаветельом")
+@dp.message_handler(text="Видео интервью с оснаветельом", user_id=[ADMINS])
 async def VideoInterview(msg: types.Message):
     await SateSetInterview.road.set()
     await msg.answer("👇 Выбирайте меню", reply_markup=interview_btn)
@@ -125,7 +126,7 @@ async def BotCreateInterviewInterval(msg: types.Message, state: FSMContext):
     
 # 
 
-@dp.message_handler(text="Рандомный пост")
+@dp.message_handler(text="Рандомный пост", user_id=[ADMINS])
 async def RandomPost(msg: types.Message):
     await SateSetRandomPost.road.set()
     await msg.answer("👇 Выбирайте меню", reply_markup=interview_btn)
@@ -170,7 +171,7 @@ async def BotCreateRabdomPostInterval(msg: types.Message, state: FSMContext):
 #
 
 
-@dp.message_handler(text="Пост о программе")
+@dp.message_handler(text="Пост о программе", user_id=[ADMINS])
 async def BotOprogr(msg: types.Message):
     await SateSetOprogram.road.set()
     await msg.answer("👇 Выбирайте меню", reply_markup=interview_btn)

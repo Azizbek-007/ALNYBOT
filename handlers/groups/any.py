@@ -5,8 +5,9 @@ import math
 import time
 from keyboards.inline import added_btn
 import asyncio
+from data.config import CHAT_ID
 
-@dp.message_handler(content_types=types.ContentType.ANY, chat_type=[types.ChatType.GROUP, types.ChatType.SUPERGROUP])
+@dp.message_handler(content_types=types.ContentType.ANY, chat_type=[types.ChatType.GROUP, types.ChatType.SUPERGROUP], chat_id=CHAT_ID)
 async def any(msg: types.Message):
     user_data = await dp.bot.get_chat_member(msg.chat.id, msg.from_id)
     print(user_data.status)
