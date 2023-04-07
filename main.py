@@ -3,6 +3,7 @@ import time
 import requests
 from data.config import BOT_TOKEN, CHAT_ID
 from utils.db_api import DBS
+import asyncio
 
 print(BOT_TOKEN)
 
@@ -13,8 +14,9 @@ class Job_first:
         data = DBS.post_sql_query(query)
         if data:
             url = f"https://api.telegram.org/bot{BOT_TOKEN}/copyMessage?chat_id={CHAT_ID}&from_chat_id={data[0][2]}&message_id={data[0][1]}"
+            print(url)
             requests.get(url)
-            self._id *= 0
+        self._id *= 0
         schedule.clear()
         self.execute_cron_jobs()
 
@@ -31,9 +33,10 @@ class Job_first:
             time.sleep(1)
             self.execute_cron_jobs()
         
-        while True:
-            schedule.run_pending()
-            time.sleep(1)
-
 
 Job_first().execute_cron_jobs()
+
+while True:
+    schedule.run_pending()
+    time.sleep(1)
+
