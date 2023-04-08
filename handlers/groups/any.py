@@ -14,6 +14,9 @@ async def any(msg: types.Message):
     if user_data.status == 'member' or user_data.status == "restricted":
         count_data = DBS.reckon_count(DBS, msg.from_id, msg.chat.id)
         data = DBS.GetQuantity(DBS)
+        print(data)
+        if data == None or data == False: return
+        
         add_count = data - count_data
         if count_data < data:
             await msg.delete()

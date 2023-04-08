@@ -52,7 +52,9 @@ class DBS:
     def GetQuantity(self):
         sql = "SELECT * FROM setting"
         data = self.post_sql_query(sql)
-        return data[0][6]      
+        if len(data) == 0:
+            return False
+        else: return data[0][6]      
 
     def SetQuantity(self, clock):
         sql = f"UPDATE setting SET quantity={clock}"
