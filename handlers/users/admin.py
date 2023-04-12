@@ -1,14 +1,16 @@
 from aiogram import types
-from aiogram.dispatcher.filters.builtin import CommandStart
 from loader import dp
 from keyboards.default import admin_btn, back_btn, interview_btn
 from keyboards.inline import delete_btn
 from states import SateSetQuantity, SateSetLink, SateSetInterview, SateSetRandomPost, SateSetOprogram
 from utils.db_api import DBS
-import schedule
 from aiogram.dispatcher import FSMContext
 from data.config import ADMINS
+import re
 
+def validate_time(time_str):
+    pattern = r'^([01]\d|2[0-3]):[0-5]\d$'
+    return bool(re.match(pattern, time_str))
     
 
 @dp.message_handler(text=["/admin", "⬅️Назад"], state="*", user_id=ADMINS)
@@ -40,7 +42,7 @@ async def BotQuantity(msg: types.Message, state: FSMContext):
 @dp.message_handler(text="Реферальная ссылка", user_id=ADMINS)
 async def ReferralLink(msg: types.Message):
     await SateSetLink.road.set()
-    await msg.answer("Отправьте линк", reply_markup=interview_btn)
+    await msg.answer("👇 Выбирайте меню", reply_markup=interview_btn)
 
 @dp.message_handler(text="Создать", state=SateSetLink.road)
 async def RLCreate(msg: types.Message):
@@ -71,11 +73,14 @@ async def BotCreateInterview(msg: types.Message, state: FSMContext):
 @dp.message_handler(state=SateSetLink.interval)
 async def BotRLInterval(msg: types.Message, state: FSMContext):
     try: 
-        data = await state.get_data()
-        DBS.SetInterval(DBS, int(msg.text), data['interviewID'])
-        await msg.reply("✅")
-        await msg.answer("👇 Выбирайте меню", reply_markup=admin_btn())
-        await state.finish()
+        if validate_time(msg.text) == True:    
+            data = await state.get_data()
+            DBS.SetInterval(DBS, msg.text, data['interviewID'])
+            await msg.reply("✅")
+            await msg.answer("👇 Выбирайте меню", reply_markup=admin_btn())
+            await state.finish()
+        else:
+            await msg.reply("Sifira qilip jiberin'")
     except: 
         await msg.reply("Sifira qilip jiberin'")
 
@@ -115,12 +120,14 @@ async def BotCreateInterview(msg: types.Message, state: FSMContext):
 
 @dp.message_handler(state=SateSetInterview.interval)
 async def BotCreateInterviewInterval(msg: types.Message, state: FSMContext):
-    try: 
-        data = await state.get_data()
-        DBS.SetInterval(DBS, int(msg.text), data['interviewID'])
-        await msg.reply("✅")
-        await msg.answer("👇 Выбирайте меню", reply_markup=admin_btn())
-        await state.finish()
+    try:
+        if validate_time(msg.text): 
+            data = await state.get_data()
+            DBS.SetInterval(DBS, msg.text, data['interviewID'])
+            await msg.reply("✅")
+            await msg.answer("👇 Выбирайте меню", reply_markup=admin_btn())
+            await state.finish()
+        else:  await msg.reply("Sifira qilip jiberin'")
     except: 
         await msg.reply("Sifira qilip jiberin'")
     
@@ -160,11 +167,14 @@ async def BotCreateRpost(msg: types.Message, state: FSMContext):
 @dp.message_handler(state=SateSetRandomPost.interval)
 async def BotCreateRabdomPostInterval(msg: types.Message, state: FSMContext):
     try: 
-        data = await state.get_data()
-        DBS.SetInterval(DBS, int(msg.text), data['interviewID'])
-        await msg.reply("✅")
-        await msg.answer("👇 Выбирайте меню", reply_markup=admin_btn())
-        await state.finish()
+        if validate_time(msg.text) == True:
+            data = await state.get_data()
+            DBS.SetInterval(DBS, msg.text, data['interviewID'])
+            await msg.reply("✅")
+            await msg.answer("👇 Выбирайте меню", reply_markup=admin_btn())
+            await state.finish()
+        else: 
+             await msg.reply("Sifira qilip jiberin'")
     except: 
         await msg.reply("Sifira qilip jiberin'")
 
@@ -204,11 +214,14 @@ async def BotCreateOProgram(msg: types.Message, state: FSMContext):
 @dp.message_handler(state=SateSetOprogram.interval)
 async def BotCreateOPInterval(msg: types.Message, state: FSMContext):
     try: 
-        data = await state.get_data()
-        DBS.SetInterval(DBS, int(msg.text), data['interviewID'])
-        await msg.reply("✅")
-        await msg.answer("👇 Выбирайте меню", reply_markup=admin_btn())
-        await state.finish()
+        if validate_time(msg.text) == True:    
+            data = await state.get_data()
+            DBS.SetInterval(DBS, msg.text, data['interviewID'])
+            await msg.reply("✅")
+            await msg.answer("👇 Выбирайте меню", reply_markup=admin_btn())
+            await state.finish()
+        else:
+            await msg.reply("Sifira qilip jiberin'")     
     except: 
         await msg.reply("Sifira qilip jiberin'")
 

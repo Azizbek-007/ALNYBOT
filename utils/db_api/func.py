@@ -1,7 +1,9 @@
 from sqlite3 import Error
 import sqlite3 
 import schedule
-import time
+import datetime
+import pytz
+
 
 class DBS:
     def post_sql_query(sql_query):
@@ -65,19 +67,29 @@ class DBS:
         self.post_sql_query(sql)
     
     def CreateInterview(self, msgID, fromID, categoryId):
-        insert_query = f"INSERT INTO Send(msgId, fromId, categoryId) VALUES ('{msgID}', '{fromID}', {categoryId})"
+        # O'zbekiston uchun vaqt zonasi
+        uz_tz = pytz.timezone('Asia/Tashkent')
+
+        # Vaqt sanoq
+        dt = datetime.datetime.now()
+
+        # Vaqtni O'zbekiston vaqti bilan muximlash
+        uz_dt = uz_tz.localize(dt)
+        print(uz_dt)
+        insert_query = f"INSERT INTO Send(msgId, fromId, categoryId, createdAt) VALUES ('{msgID}', '{fromID}', {categoryId}, '{uz_dt}')"
         self.post_sql_query(insert_query)
         data = self.post_sql_query("SELECT * FROM Send ORDER BY id DESC LIMIT 1;")[0][0]
         return data
     
     def SetInterval(self, interval, _id):
-        sql = f"UPDATE Send SET interval={interval} WHERE id={_id}"
+        print(interval)
+        sql = f"UPDATE Send SET interval='{interval}' WHERE id={_id}"
         self.post_sql_query(sql)
         schedule.clear()
         self.execute_cron_jobs(DBS)
     
     def GetAll (self, _id):
-        sql = f"SELECT * FROM Send WHERE categoryId={_id}"
+        sql = f"SELECT * FROM Send WHERE categoryId={_id} AND interval NOTNULL"
         print(sql)
         data = self.post_sql_query(sql)
         return data

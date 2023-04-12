@@ -1,8 +1,6 @@
 from aiogram import types
 from loader import dp
 from utils.db_api import DBS
-import math
-import time
 from keyboards.inline import added_btn
 import asyncio
 from data.config import CHAT_ID
