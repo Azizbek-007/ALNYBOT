@@ -54,7 +54,7 @@ class DBS:
     def GetQuantity(self):
         sql = "SELECT * FROM setting"
         data = self.post_sql_query(sql)
-        if len(data) == 0:
+        if len(data) == 0 or data[0][6] == 0 :
             return False
         else: return data[0][6]      
 
