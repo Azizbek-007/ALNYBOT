@@ -9,7 +9,6 @@ from utils.db_api import DBS
 async def new_chat_member_bot(msg: types.Message):
     new_members = msg.new_chat_members
     await msg.delete()
-    await msg.answer(msg)
     print(new_members)
     for x in new_members:
         print("qosti", x)
