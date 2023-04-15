@@ -130,7 +130,14 @@ class DBS:
         #     schedule.run_pending()
         #     time.sleep(1)
 
-        
+    def GetBotStatus(self):
+        data = self.post_sql_query("SELECT status FROM setting WHERE id=1")
+        if data[0][0] == 1:
+            return True
+        else: return False
+    
+    def SetStatus(self, status):
+        sql = f"UPDATE setting SET status={status} WHERE id=1"
+        self.post_sql_query(sql)
 
-
-
+print(DBS.GetBotStatus(DBS))

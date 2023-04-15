@@ -1,5 +1,5 @@
 from aiogram import types
-from loader import dp
+from loader import dp, bot
 from keyboards.default import admin_btn, back_btn, interview_btn
 from keyboards.inline import delete_btn
 from states import SateSetQuantity, SateSetLink, SateSetInterview, SateSetRandomPost, SateSetOprogram
@@ -13,6 +13,20 @@ def validate_time(time_str):
     pattern = r'^([01]\d|2[0-3]):[0-5]\d$'
     return bool(re.match(pattern, time_str))
     
+
+
+# /on komandasiga javob berish
+@dp.message_handler(commands=['on'])
+async def bot_on(message: types.Message):
+    DBS.SetStatus(DBS, 1)
+    await message.reply('v')
+
+
+# /off komandasiga javob berish
+@dp.message_handler(commands=['off'])
+async def bot_off(message: types.Message):
+    DBS.SetStatus(DBS, 0)
+    await message.reply('Бот был остановлен')
 
 @dp.message_handler(text=["/admin", "⬅️Назад"], state="*", user_id=ADMINS)
 async def bot_admin(message: types.Message, state: FSMContext):
