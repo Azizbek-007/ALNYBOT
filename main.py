@@ -8,7 +8,6 @@ from utils.db_api import DBS
 
 print(BOT_TOKEN)
 
-data = {}
 
 
 def job():

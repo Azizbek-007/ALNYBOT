@@ -7,6 +7,7 @@ from utils.db_api import DBS
 from aiogram.dispatcher import FSMContext
 from data.config import ADMINS
 import re
+import asyncio
 
 def validate_time(time_str):
     pattern = r'^([01]\d|2[0-3]):[0-5]\d$'
@@ -57,8 +58,8 @@ async def RLGetAlllm(msg: types.Message, state: FSMContext):
         print(data)
         await msg.reply("✅", reply_markup=back_btn)
         for x in data:
-            print(x)
             await dp.bot.copy_message(msg.from_id, x[2], x[1], reply_markup=delete_btn(x[0]))
+            await asyncio.sleep(0.7)
     else:
         await msg.reply("Not Found", reply_markup=admin_btn())
 
@@ -67,7 +68,7 @@ async def BotCreateInterview(msg: types.Message, state: FSMContext):
     _id = DBS.CreateInterview(DBS, msg.message_id, msg.from_id, 4)
     await state.update_data(interviewID=_id)
     await msg.reply("✅")
-    await msg.answer("Введите интервал в секундах")
+    await msg.answer("Введите час в представлении PM")
     await SateSetLink.next()
 
 @dp.message_handler(state=SateSetLink.interval)
@@ -80,9 +81,9 @@ async def BotRLInterval(msg: types.Message, state: FSMContext):
             await msg.answer("👇 Выбирайте меню", reply_markup=admin_btn())
             await state.finish()
         else:
-            await msg.reply("Sifira qilip jiberin'")
+            await msg.reply("PM ko'rinisinde waqit kiritin")
     except: 
-        await msg.reply("Sifira qilip jiberin'")
+        await msg.reply("PM ko'rinisinde waqit kiritin")
 
  
 # 
@@ -105,6 +106,7 @@ async def VGetAll(msg: types.Message, state: FSMContext):
     if data:
         await msg.reply("✅", reply_markup=back_btn)
         for x in data:
+            await asyncio.sleep(0.7)
             await dp.bot.copy_message(msg.from_id, x[2], x[1], reply_markup=delete_btn(x[0]))
     else:
         await msg.reply("Not Found", reply_markup=admin_btn())
@@ -115,7 +117,7 @@ async def BotCreateInterview(msg: types.Message, state: FSMContext):
     _id = DBS.CreateInterview(DBS, msg.message_id, msg.from_id, 1)
     await state.update_data(interviewID=_id)
     await msg.reply("✅")
-    await msg.answer("Введите интервал в секундах")
+    await msg.answer("Введите час в представлении PM")
     await SateSetInterview.next()
 
 @dp.message_handler(state=SateSetInterview.interval)
@@ -127,9 +129,9 @@ async def BotCreateInterviewInterval(msg: types.Message, state: FSMContext):
             await msg.reply("✅")
             await msg.answer("👇 Выбирайте меню", reply_markup=admin_btn())
             await state.finish()
-        else:  await msg.reply("Sifira qilip jiberin'")
+        else:  await msg.reply("PM ko'rinisinde waqit kiritin")
     except: 
-        await msg.reply("Sifira qilip jiberin'")
+        await msg.reply("PM ko'rinisinde waqit kiritin")
     
 # 
 
@@ -150,6 +152,7 @@ async def RPGetAll(msg: types.Message, state: FSMContext):
     if data:
         await msg.reply("✅", reply_markup=back_btn)
         for x in data:
+            await asyncio.sleep(0.7)
             await dp.bot.copy_message(msg.from_id, x[2], x[1], reply_markup=delete_btn(x[0]))
     else:
         await msg.reply("Not Found", reply_markup=admin_btn())
@@ -160,7 +163,7 @@ async def BotCreateRpost(msg: types.Message, state: FSMContext):
     _id = DBS.CreateInterview(DBS, msg.message_id, msg.from_id, 2)
     await state.update_data(interviewID=_id)
     await msg.reply("✅")
-    await msg.answer("Введите интервал в секундах")
+    await msg.answer("Введите час в представлении PM")
     await SateSetRandomPost.next()
 
 
@@ -174,9 +177,9 @@ async def BotCreateRabdomPostInterval(msg: types.Message, state: FSMContext):
             await msg.answer("👇 Выбирайте меню", reply_markup=admin_btn())
             await state.finish()
         else: 
-             await msg.reply("Sifira qilip jiberin'")
+             await msg.reply("PM ko'rinisinde waqit kiritin")
     except: 
-        await msg.reply("Sifira qilip jiberin'")
+        await msg.reply("PM ko'rinisinde waqit kiritin")
 
 #
 
@@ -199,6 +202,7 @@ async def POGetAll(msg: types.Message, state: FSMContext):
     if data:
         await msg.reply("✅", reply_markup=back_btn)
         for x in data:
+            await asyncio.sleep(0.7)
             await dp.bot.copy_message(msg.from_id, x[2], x[1], reply_markup=delete_btn(x[0]))
     else:
         await msg.reply("Not Found", reply_markup=admin_btn())
@@ -208,7 +212,7 @@ async def BotCreateOProgram(msg: types.Message, state: FSMContext):
     _id = DBS.CreateInterview(DBS, msg.message_id, msg.from_id, 3)
     await state.update_data(interviewID=_id)
     await msg.reply("✅")
-    await msg.answer("Введите интервал в секундах")
+    await msg.answer("Введите час в представлении PM")
     await SateSetOprogram.next()
 
 @dp.message_handler(state=SateSetOprogram.interval)
@@ -221,9 +225,9 @@ async def BotCreateOPInterval(msg: types.Message, state: FSMContext):
             await msg.answer("👇 Выбирайте меню", reply_markup=admin_btn())
             await state.finish()
         else:
-            await msg.reply("Sifira qilip jiberin'")     
+            await msg.reply("PM ko'rinisinde waqit kiritin")     
     except: 
-        await msg.reply("Sifira qilip jiberin'")
+        await msg.reply("PM ko'rinisinde waqit kiritin")
 
 
 @dp.callback_query_handler(lambda call: call.data.startswith('del='))
