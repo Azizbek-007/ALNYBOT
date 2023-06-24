@@ -72,8 +72,11 @@ async def RLGetAlllm(msg: types.Message, state: FSMContext):
         print(data)
         await msg.reply("✅", reply_markup=back_btn)
         for x in data:
-            await dp.bot.copy_message(msg.from_id, x[2], x[1], reply_markup=delete_btn(x[0]))
-            await asyncio.sleep(0.7)
+            try:
+                print('fromid', x[2], 'msgid', x[1])
+                await dp.bot.copy_message(msg.chat.id, x[2], x[1], reply_markup=delete_btn(x[0]))
+                await asyncio.sleep(0.7)
+            except: continue
     else:
         await msg.reply("Not Found", reply_markup=admin_btn())
 
@@ -120,8 +123,10 @@ async def VGetAll(msg: types.Message, state: FSMContext):
     if data:
         await msg.reply("✅", reply_markup=back_btn)
         for x in data:
-            await asyncio.sleep(0.7)
-            await dp.bot.copy_message(msg.from_id, x[2], x[1], reply_markup=delete_btn(x[0]))
+            try:
+                await asyncio.sleep(0.7)
+                await dp.bot.copy_message(msg.from_id, x[2], x[1], reply_markup=delete_btn(x[0]))
+            except: continue
     else:
         await msg.reply("Not Found", reply_markup=admin_btn())
 
@@ -166,8 +171,10 @@ async def RPGetAll(msg: types.Message, state: FSMContext):
     if data:
         await msg.reply("✅", reply_markup=back_btn)
         for x in data:
-            await asyncio.sleep(0.7)
-            await dp.bot.copy_message(msg.from_id, x[2], x[1], reply_markup=delete_btn(x[0]))
+            try: 
+                await asyncio.sleep(0.7)
+                await dp.bot.copy_message(msg.from_id, x[2], x[1], reply_markup=delete_btn(x[0]))
+            except: continue
     else:
         await msg.reply("Not Found", reply_markup=admin_btn())
 
@@ -216,8 +223,10 @@ async def POGetAll(msg: types.Message, state: FSMContext):
     if data:
         await msg.reply("✅", reply_markup=back_btn)
         for x in data:
-            await asyncio.sleep(0.7)
-            await dp.bot.copy_message(msg.from_id, x[2], x[1], reply_markup=delete_btn(x[0]))
+            try:
+                await asyncio.sleep(0.7)
+                await dp.bot.copy_message(msg.from_id, x[2], x[1], reply_markup=delete_btn(x[0]))
+            except: continue
     else:
         await msg.reply("Not Found", reply_markup=admin_btn())
 
