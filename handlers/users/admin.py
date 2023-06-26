@@ -68,6 +68,7 @@ async def RLCreate(msg: types.Message):
 async def RLGetAlllm(msg: types.Message, state: FSMContext):
     await state.finish()
     data = DBS.GetAll(DBS, 4)
+    print('referal datas: ', data)
     if data:
         print(data)
         await msg.reply("✅", reply_markup=back_btn)
