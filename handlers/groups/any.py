@@ -7,13 +7,13 @@ from data.config import CHAT_ID
 
 @dp.message_handler(content_types=types.ContentType.ANY, chat_type=[types.ChatType.GROUP, types.ChatType.SUPERGROUP])
 async def any(msg: types.Message):
-    if DBS.GetBotStatus(DBS) == True:
+    if DBS.GetBotStatus() == True:
         if msg.from_user.username != "GroupAnonymousBot":
             user_data = await dp.bot.get_chat_member(msg.chat.id, msg.from_user.id)
             
             if user_data.status == 'member' or user_data.status == "restricted":
-                count_data = DBS.reckon_count(DBS, msg.from_id, msg.chat.id)
-                data = DBS.GetQuantity(DBS)
+                count_data = DBS.reckon_count(msg.from_id, msg.chat.id)
+                data = DBS.GetQuantity()
                 print(data)
                 if data == None or data == False: return
                 
@@ -28,8 +28,8 @@ async def any(msg: types.Message):
 async def mem_added(call: types.CallbackQuery):
     call_user_id = call.data.split('=')[1]
     if str(call_user_id) == str(call.from_user.id):
-        user_count = DBS.GetUserCount(DBS, call.from_user.id, chat_id=call.message.chat.id)
-        data = DBS.GetQuantity(DBS)
+        user_count = DBS.GetUserCount(call.from_user.id, chat_id=call.message.chat.id)
+        data = DBS.GetQuantity()
         add_count = data - user_count
         if user_count < data:
             await call.answer(f"Для размещения объявления необходимо добавить в группу не менее {add_count} человек.", True)

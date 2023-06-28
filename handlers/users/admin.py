@@ -18,14 +18,14 @@ def validate_time(time_str):
 # /on komandasiga javob berish
 @dp.message_handler(commands=['on'])
 async def bot_on(message: types.Message):
-    DBS.SetStatus(DBS, 1)
+    DBS.SetStatus(1)
     await message.reply('v')
 
 
 # /off komandasiga javob berish
 @dp.message_handler(commands=['off'])
 async def bot_off(message: types.Message):
-    DBS.SetStatus(DBS, 0)
+    DBS.SetStatus(0)
     await message.reply('Бот был остановлен')
 
 @dp.message_handler(text=["/admin", "⬅️Назад"], state="*", user_id=ADMINS)
@@ -43,7 +43,7 @@ async def Quantity(msg: types.Message):
 async def BotQuantity(msg: types.Message, state: FSMContext):
     try:
         quan = int(msg.text)
-        DBS.SetQuantity(DBS, quan)
+        DBS.SetQuantity(quan)
         await state.finish()
         await msg.reply("✅")
         await msg.answer("👇 Выбирайте меню", reply_markup=admin_btn())
@@ -67,7 +67,7 @@ async def RLCreate(msg: types.Message):
 @dp.message_handler(text="Видеть все", state=SateSetLink.road)
 async def RLGetAlllm(msg: types.Message, state: FSMContext):
     await state.finish()
-    data = DBS.GetAll(DBS, 4)
+    data = DBS.GetAll(4)
     print('referal datas: ', data)
     if data:
         print(data)
@@ -76,6 +76,7 @@ async def RLGetAlllm(msg: types.Message, state: FSMContext):
             try:
                 print('fromid', x[2], 'msgid', x[1])
                 await dp.bot.copy_message(msg.chat.id, x[2], x[1], reply_markup=delete_btn(x[0]))
+                
                 await asyncio.sleep(0.7)
             except: continue
     else:
@@ -83,7 +84,7 @@ async def RLGetAlllm(msg: types.Message, state: FSMContext):
 
 @dp.message_handler(content_types=types.ContentTypes.ANY, state=SateSetLink.promis)
 async def BotCreateInterview(msg: types.Message, state: FSMContext):
-    _id = DBS.CreateInterview(DBS, msg.message_id, msg.from_id, 4)
+    _id = DBS.CreateInterview(msg.message_id, msg.from_id, 4)
     await state.update_data(interviewID=_id)
     await msg.reply("✅")
     await msg.answer("Введите час в представлении PM")
@@ -94,7 +95,7 @@ async def BotRLInterval(msg: types.Message, state: FSMContext):
     try: 
         if validate_time(msg.text) == True:    
             data = await state.get_data()
-            DBS.SetInterval(DBS, msg.text, data['interviewID'])
+            DBS.SetInterval(msg.text, data['interviewID'])
             await msg.reply("✅")
             await msg.answer("👇 Выбирайте меню", reply_markup=admin_btn())
             await state.finish()
@@ -120,7 +121,7 @@ async def Create(msg: types.Message):
 @dp.message_handler(text="Видеть все", state=SateSetInterview.road)
 async def VGetAll(msg: types.Message, state: FSMContext):
     await state.finish()
-    data = DBS.GetAll(DBS, 1)
+    data = DBS.GetAll(1)
     if data:
         await msg.reply("✅", reply_markup=back_btn)
         for x in data:
@@ -134,7 +135,7 @@ async def VGetAll(msg: types.Message, state: FSMContext):
 
 @dp.message_handler(content_types=types.ContentType.ANY, state=SateSetInterview.promis)
 async def BotCreateInterview(msg: types.Message, state: FSMContext):
-    _id = DBS.CreateInterview(DBS, msg.message_id, msg.from_id, 1)
+    _id = DBS.CreateInterview(msg.message_id, msg.from_id, 1)
     await state.update_data(interviewID=_id)
     await msg.reply("✅")
     await msg.answer("Введите час в представлении PM")
@@ -145,7 +146,7 @@ async def BotCreateInterviewInterval(msg: types.Message, state: FSMContext):
     try:
         if validate_time(msg.text): 
             data = await state.get_data()
-            DBS.SetInterval(DBS, msg.text, data['interviewID'])
+            DBS.SetInterval(msg.text, data['interviewID'])
             await msg.reply("✅")
             await msg.answer("👇 Выбирайте меню", reply_markup=admin_btn())
             await state.finish()
@@ -168,7 +169,7 @@ async def RCreate(msg: types.Message):
 @dp.message_handler(text="Видеть все", state=SateSetRandomPost.road)
 async def RPGetAll(msg: types.Message, state: FSMContext):
     await state.finish()
-    data = DBS.GetAll(DBS, 2)
+    data = DBS.GetAll(2)
     if data:
         await msg.reply("✅", reply_markup=back_btn)
         for x in data:
@@ -182,7 +183,7 @@ async def RPGetAll(msg: types.Message, state: FSMContext):
 
 @dp.message_handler(content_types=types.ContentType.ANY, state=SateSetRandomPost.promis)
 async def BotCreateRpost(msg: types.Message, state: FSMContext):
-    _id = DBS.CreateInterview(DBS, msg.message_id, msg.from_id, 2)
+    _id = DBS.CreateInterview(msg.message_id, msg.from_id, 2)
     await state.update_data(interviewID=_id)
     await msg.reply("✅")
     await msg.answer("Введите час в представлении PM")
@@ -194,7 +195,7 @@ async def BotCreateRabdomPostInterval(msg: types.Message, state: FSMContext):
     try: 
         if validate_time(msg.text) == True:
             data = await state.get_data()
-            DBS.SetInterval(DBS, msg.text, data['interviewID'])
+            DBS.SetInterval(msg.text, data['interviewID'])
             await msg.reply("✅")
             await msg.answer("👇 Выбирайте меню", reply_markup=admin_btn())
             await state.finish()
@@ -220,7 +221,7 @@ async def OPCreate(msg: types.Message):
 @dp.message_handler(text="Видеть все", state=SateSetOprogram.road)
 async def POGetAll(msg: types.Message, state: FSMContext):
     await state.finish()
-    data = DBS.GetAll(DBS, 3)
+    data = DBS.GetAll(3)
     if data:
         await msg.reply("✅", reply_markup=back_btn)
         for x in data:
@@ -233,7 +234,7 @@ async def POGetAll(msg: types.Message, state: FSMContext):
 
 @dp.message_handler(content_types=types.ContentType.ANY, state=SateSetOprogram.promis)
 async def BotCreateOProgram(msg: types.Message, state: FSMContext):
-    _id = DBS.CreateInterview(DBS, msg.message_id, msg.from_id, 3)
+    _id = DBS.CreateInterview(msg.message_id, msg.from_id, 3)
     await state.update_data(interviewID=_id)
     await msg.reply("✅")
     await msg.answer("Введите час в представлении PM")
@@ -244,7 +245,7 @@ async def BotCreateOPInterval(msg: types.Message, state: FSMContext):
     try: 
         if validate_time(msg.text) == True:    
             data = await state.get_data()
-            DBS.SetInterval(DBS, msg.text, data['interviewID'])
+            DBS.SetInterval(msg.text, data['interviewID'])
             await msg.reply("✅")
             await msg.answer("👇 Выбирайте меню", reply_markup=admin_btn())
             await state.finish()
