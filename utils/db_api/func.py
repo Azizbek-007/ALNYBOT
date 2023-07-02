@@ -54,7 +54,7 @@ class DBS:
             insert_query = f"INSERT INTO reckon(count, user_id, chat_id) VALUES (1, '{user_id}', '{chat_id}')"
             DBS.post_sql_query(insert_query)
         else:
-            new_count = data[0][1] + 1
+            new_count = data[0][0] + 1
             sql = f"UPDATE reckon SET count={new_count} WHERE user_id='{user_id}' AND chat_id='{chat_id}'"
             DBS.post_sql_query(sql)
 
